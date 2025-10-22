@@ -1,22 +1,11 @@
 {
-  "name": "whitefly-frontend",
-  "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ],
   "env": {
-    "VITE_API_URL": "https://cicd-whitefly-v2.onrender.com"
+    "VITE_API_URL": "https://cicd-whitefly-v2.onrender.com/api"
   }
 }
