@@ -144,6 +144,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Vite default port
     "http://localhost:3000",  # Alternative React port
     "https://whitefly-frontend.vercel.app",  # Your Vercel domain
+    "https://cicd-whitefly-2ee8.vercel.app",  # Your actual Vercel domain
     "https://your-frontend-domain.vercel.app",  # Update with actual domain
 ]
 
@@ -157,6 +158,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:3000",
     "https://whitefly-frontend.vercel.app",
+    "https://cicd-whitefly-2ee8.vercel.app",  # Your actual Vercel domain
     "https://your-frontend-domain.vercel.app",
     "https://cicd-whitefly-1.onrender.com",
 ]

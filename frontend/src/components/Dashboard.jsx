@@ -19,6 +19,9 @@ import {
 } from 'lucide-react';
 import api from '../api/axios';
 
+// Get base URL from environment or use localhost as fallback
+const BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:8000';
+
 const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -47,7 +50,7 @@ const Dashboard = () => {
     } catch (err) {
       setError(
         err.response?.data?.error || 
-        'Upload failed. Make sure the detection API is running on localhost:5000'
+        'Upload failed. Please check your internet connection and try again.'
       );
     } finally {
       setUploading(false);
@@ -68,7 +71,7 @@ const Dashboard = () => {
   };
 
   const handleDownloadCSV = () => {
-    window.open('http://localhost:8000/media/csv/results.csv', '_blank');
+    window.open(`${BASE_URL}/media/csv/results.csv`, '_blank');
   };
 
   const menuItems = [
@@ -396,7 +399,7 @@ const Dashboard = () => {
                       <div key={idx} className="bg-white border border-slate-200/60 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
                         <div className="h-48 bg-gradient-to-br from-slate-50 to-slate-100 overflow-hidden relative">
                           <img
-                            src={`http://localhost:8000${result.annotated_image_url}`}
+                            src={`${BASE_URL}${result.annotated_image_url}`}
                             alt={result.image_name}
                             className="w-full h-full object-cover"
                           />
@@ -415,7 +418,7 @@ const Dashboard = () => {
                             </div>
                           </div>
                           <a
-                            href={`http://localhost:8000${result.annotated_image_url}`}
+                            href={`${BASE_URL}${result.annotated_image_url}`}
                             download
                             className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 w-full justify-center"
                           >
