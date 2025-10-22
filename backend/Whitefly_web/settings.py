@@ -29,7 +29,7 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'cicd-whitefly-1.onrender.com',  # Your Render domain
+    'cicd-whitefly-v2.onrender.com',  # Your new Render domain
     '.onrender.com',  # Allow all Render subdomains
 ]
 
@@ -146,6 +146,9 @@ CORS_ALLOWED_ORIGINS = [
     "https://whitefly-frontend.vercel.app",  # Your Vercel domain
     "https://your-frontend-domain.vercel.app",  # Update with actual domain
 ]
+
+# Allow all Vercel domains for now (you can restrict this later)
+CORS_ALLOW_ALL_ORIGINS = True  # Temporary for testing
 
 CORS_ALLOW_CREDENTIALS = True
 

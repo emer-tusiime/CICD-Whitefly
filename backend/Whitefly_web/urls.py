@@ -17,8 +17,21 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import JsonResponse
+
+def api_root(request):
+    return JsonResponse({
+        'message': 'WhiteFly Detection API',
+        'status': 'online',
+        'endpoints': {
+            'api': '/api/',
+            'admin': '/admin/',
+            'media': '/media/'
+        }
+    })
 
 urlpatterns = [
+    path('', api_root, name='api_root'),  # Root endpoint
     path('api/', include('whitefly.api_urls')),  # REST API endpoints for React frontend
     path('admin/', admin.site.urls),  # Django admin panel
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

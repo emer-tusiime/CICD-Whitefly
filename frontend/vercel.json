@@ -17,6 +17,6 @@
     }
   ],
   "env": {
-    "VITE_API_URL": "https://cicd-whitefly-1.onrender.com"
+    "VITE_API_URL": "https://cicd-whitefly-v2.onrender.com"
   }
 }
