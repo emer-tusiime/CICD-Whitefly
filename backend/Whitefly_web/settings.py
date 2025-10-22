@@ -24,9 +24,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-hw55d#989o0(q8b312#oq@!kwr&%ryd@t=$tz-@u0f6#_b1_r2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'cicd-whitefly-1.onrender.com',  # Your Render domain
+    '.onrender.com',  # Allow all Render subdomains
+]
 
 
 # Application definition 
@@ -138,6 +143,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Vite default port
     "http://localhost:3000",  # Alternative React port
+    "https://whitefly-frontend.vercel.app",  # Your Vercel domain
+    "https://your-frontend-domain.vercel.app",  # Update with actual domain
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -146,6 +153,9 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:3000",
+    "https://whitefly-frontend.vercel.app",
+    "https://your-frontend-domain.vercel.app",
+    "https://cicd-whitefly-1.onrender.com",
 ]
 
 CSRF_COOKIE_SAMESITE = 'Lax'
