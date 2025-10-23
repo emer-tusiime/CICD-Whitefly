@@ -5,7 +5,9 @@
       "destination": "/index.html"
     }
   ],
-  "env": {
-    "VITE_API_URL": "https://cicd-whitefly-v2.onrender.com/api"
+  "build": {
+    "env": {
+      "VITE_API_URL": "https://cicd-whitefly-v2.onrender.com/api"
+    }
   }
 }

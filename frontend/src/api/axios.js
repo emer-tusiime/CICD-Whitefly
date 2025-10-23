@@ -1,7 +1,17 @@
 import axios from 'axios';
 
+// Determine API URL based on environment
+const getApiUrl = () => {
+  // Production environment
+  if (import.meta.env.PROD) {
+    return 'https://cicd-whitefly-v2.onrender.com/api';
+  }
+  // Development environment - check for custom URL first
+  return import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+};
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
+  baseURL: getApiUrl(),
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',

@@ -19,8 +19,15 @@ import {
 } from 'lucide-react';
 import api from '../api/axios';
 
-// Get base URL from environment or use localhost as fallback
-const BASE_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:8000';
+// Get base URL from environment or use production URL
+const getBaseUrl = () => {
+  if (import.meta.env.PROD) {
+    return 'https://cicd-whitefly-v2.onrender.com';
+  }
+  return import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:8000';
+};
+
+const BASE_URL = getBaseUrl();
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
