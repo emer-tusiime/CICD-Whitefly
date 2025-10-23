@@ -16,28 +16,56 @@ export const AuthProvider = ({ children }) => {
         const response = await api.get('/auth/user/');
         setUser(response.data);
       } catch (error) {
+        // Don't check auth on initial load for production
+        // User will need to login explicitly
+        console.log('Auth check failed:', error.response?.status);
         setUser(null);
       } finally {
         setLoading(false);
       }
     };
 
-    checkAuth();
+    // Only check auth in development or if we have a session
+    if (import.meta.env.DEV || document.cookie.includes('sessionid')) {
+      checkAuth();
+    } else {
+      setLoading(false);
+    }
   }, []);
 
   const login = async (username, password) => {
-    // Get CSRF token first
-    await api.get('/csrf/');
-    const response = await api.post('/auth/login/', { username, password });
-    setUser(response.data.user);
-    return response.data;
+    try {
+      // Get CSRF token first
+      console.log('Getting CSRF token...');
+      await api.get('/csrf/');
+      console.log('CSRF token obtained, attempting login...');
+      
+      const response = await api.post('/auth/login/', { username, password });
+      console.log('Login successful:', response.data);
+      
+      setUser(response.data.user);
+      return response.data;
+    } catch (error) {
+      console.error('Login error:', error.response?.data || error.message);
+      throw error;
+    }
   };
 
   const signup = async (username, email, password) => {
-    // Get CSRF token first
-    await api.get('/csrf/');
-    const response = await api.post('/auth/signup/', { username, email, password });
-    return response.data;
+    try {
+      // Get CSRF token first
+      console.log('Getting CSRF token for signup...');
+      await api.get('/csrf/');
+      console.log('CSRF token obtained, attempting signup...');
+      
+      const response = await api.post('/auth/signup/', { username, email, password });
+      console.log('Signup successful:', response.data);
+      
+      return response.data;
+    } catch (error) {
+      console.error('Signup error:', error.response?.data || error.message);
+      throw error;
+    }
   };
 
   const logout = async () => {
