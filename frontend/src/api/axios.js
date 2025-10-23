@@ -24,8 +24,25 @@ api.interceptors.request.use((config) => {
   if (csrfToken) {
     config.headers['X-CSRFToken'] = csrfToken;
   }
+  
+  // For file uploads, don't set Content-Type (let browser set it with boundary)
+  if (config.data instanceof FormData) {
+    delete config.headers['Content-Type'];
+  }
+  
   return config;
 });
+
+// Add response interceptor for better error handling
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 403) {
+      console.error('CSRF token might be invalid or missing');
+    }
+    return Promise.reject(error);
+  }
+);
 
 // Helper function to get CSRF token from cookies
 function getCookie(name) {

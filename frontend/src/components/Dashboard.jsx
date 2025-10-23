@@ -47,11 +47,8 @@ const Dashboard = () => {
     });
 
     try {
-      const response = await api.post('/upload/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      // Don't set Content-Type manually - let axios handle it for FormData
+      const response = await api.post('/upload/', formData);
 
       setResults(response.data.results);
     } catch (err) {

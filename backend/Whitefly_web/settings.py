@@ -157,20 +157,22 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:3000",
-    "https://whitefly-frontend.vercel.app",
     "https://cicd-whitefly-2ee8.vercel.app",  # Your actual Vercel domain
-    "https://your-frontend-domain.vercel.app",
-    "https://cicd-whitefly-1.onrender.com",
+    "https://cicd-whitefly-v2.onrender.com",  # Your backend domain
 ]
 
+# Production CSRF settings
 CSRF_COOKIE_SAMESITE = 'None'  # Required for cross-origin requests
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SECURE = True  # Required for HTTPS in production
+CSRF_COOKIE_NAME = 'csrftoken'
 
 # Session cookie settings for cross-origin
 SESSION_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_HTTPONLY = False  # Allow JavaScript access for debugging
+SESSION_COOKIE_NAME = 'sessionid'
+SESSION_COOKIE_AGE = 86400  # 24 hours
 
 # REST Framework Settings
 REST_FRAMEWORK = {
