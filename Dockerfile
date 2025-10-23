@@ -34,5 +34,5 @@ RUN python manage.py migrate
 # Expose port
 EXPOSE 8000
 
-# Run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "Whitefly_web.wsgi:application"]
+# Run the application with more robust settings
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "--timeout", "120", "--keep-alive", "5", "Whitefly_web.wsgi:application"]
