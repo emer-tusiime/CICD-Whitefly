@@ -26,12 +26,16 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (username, password) => {
+    // Get CSRF token first
+    await api.get('/csrf/');
     const response = await api.post('/auth/login/', { username, password });
     setUser(response.data.user);
     return response.data;
   };
 
   const signup = async (username, email, password) => {
+    // Get CSRF token first
+    await api.get('/csrf/');
     const response = await api.post('/auth/signup/', { username, email, password });
     return response.data;
   };

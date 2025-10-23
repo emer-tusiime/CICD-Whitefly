@@ -163,9 +163,14 @@ CSRF_TRUSTED_ORIGINS = [
     "https://cicd-whitefly-1.onrender.com",
 ]
 
-CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'None'  # Required for cross-origin requests
 CSRF_COOKIE_HTTPONLY = False
-CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = True  # Required for HTTPS in production
+
+# Session cookie settings for cross-origin
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
 
 # REST Framework Settings
 REST_FRAMEWORK = {
