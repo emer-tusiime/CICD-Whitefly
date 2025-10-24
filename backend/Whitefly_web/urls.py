@@ -34,5 +34,6 @@ urlpatterns = [
     path('', api_root, name='api_root'),  # Root endpoint
     path('api/', include('whitefly.api_urls')),  # REST API endpoints for React frontend
     path('admin/', admin.site.urls),  # Django admin panel
+    path('', include('django_prometheus.urls')),  # Prometheus metrics endpoint
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

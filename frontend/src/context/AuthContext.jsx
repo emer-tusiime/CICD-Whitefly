@@ -1,5 +1,6 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import api from '../api/axios';
+import { setUser as setMonitoringUser, clearUser as clearMonitoringUser } from '../utils/monitoring';
 
 const AuthContext = createContext(null);
 
@@ -44,6 +45,8 @@ export const AuthProvider = ({ children }) => {
       console.log('Login successful:', response.data);
       
       setUser(response.data.user);
+      // Track user in monitoring
+      setMonitoringUser(response.data.user);
       return response.data;
     } catch (error) {
       console.error('Login error:', error.response?.data || error.message);
@@ -71,6 +74,8 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     await api.post('/auth/logout/');
     setUser(null);
+    // Clear user from monitoring
+    clearMonitoringUser();
   };
 
   return (

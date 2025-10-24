@@ -18,6 +18,13 @@ import {
   FileText
 } from 'lucide-react';
 import api from '../api/axios';
+import { 
+  trackImageUpload, 
+  trackDetection, 
+  trackCSVExport, 
+  trackNavigation,
+  trackAPIError 
+} from '../utils/monitoring';
 
 // Get base URL from environment or use production URL
 const getBaseUrl = () => {
@@ -46,16 +53,29 @@ const Dashboard = () => {
       formData.append('images', file);
     });
 
+    const startTime = Date.now();
+
     try {
       // Don't set Content-Type manually - let axios handle it for FormData
       const response = await api.post('/upload/', formData);
 
+      const duration = Date.now() - startTime;
       setResults(response.data.results);
+      
+      // Track successful upload
+      trackImageUpload(acceptedFiles.length, duration);
+      
+      // Track detection results
+      response.data.results.forEach(result => {
+        trackDetection(result.whitefly_count, duration / acceptedFiles.length);
+      });
     } catch (err) {
-      setError(
-        err.response?.data?.error || 
-        'Upload failed. Please check your internet connection and try again.'
-      );
+      const errorMsg = err.response?.data?.error || 
+        'Upload failed. Please check your internet connection and try again.';
+      setError(errorMsg);
+      
+      // Track API error
+      trackAPIError('/upload/', err.response?.status || 0, errorMsg);
     } finally {
       setUploading(false);
     }
@@ -76,6 +96,8 @@ const Dashboard = () => {
 
   const handleDownloadCSV = () => {
     window.open(`${BASE_URL}/media/csv/results.csv`, '_blank');
+    // Track CSV export
+    trackCSVExport();
   };
 
   const menuItems = [
@@ -125,6 +147,8 @@ const Dashboard = () => {
                     item.action();
                   } else {
                     setActiveTab(item.id);
+                    // Track navigation
+                    trackNavigation(item.id);
                   }
                 }}
                 className={`group w-full flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 font-medium ${

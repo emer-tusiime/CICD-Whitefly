@@ -1,0 +1,135 @@
+{
+  "dashboard": {
+    "title": "WhiteFly Backend Monitoring",
+    "tags": ["backend", "django", "prometheus"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "title": "Request Rate",
+        "type": "timeseries",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+        "targets": [
+          {
+            "expr": "rate(django_http_requests_total[5m])",
+            "legendFormat": "{{method}} {{view}}"
+          }
+        ]
+      },
+      {
+        "title": "Response Time (p95)",
+        "type": "timeseries",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(django_http_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "{{view}} - p95"
+          }
+        ]
+      },
+      {
+        "title": "Total Requests",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 8},
+        "targets": [
+          {
+            "expr": "sum(django_http_requests_total)",
+            "legendFormat": "Total Requests"
+          }
+        ]
+      },
+      {
+        "title": "Error Rate (5xx)",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 8},
+        "targets": [
+          {
+            "expr": "rate(django_http_requests_total{status=~\"5..\"}[5m])",
+            "legendFormat": "5xx Errors/s"
+          }
+        ]
+      },
+      {
+        "title": "Active Users",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 8},
+        "targets": [
+          {
+            "expr": "django_http_requests_latency_seconds_by_view_method_count{view=\"current_user_view\"}",
+            "legendFormat": "Active Users"
+          }
+        ]
+      },
+      {
+        "title": "Database Query Time",
+        "type": "timeseries",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 12},
+        "targets": [
+          {
+            "expr": "rate(django_db_query_duration_seconds_sum[5m]) / rate(django_db_query_duration_seconds_count[5m])",
+            "legendFormat": "Avg Query Time"
+          }
+        ]
+      },
+      {
+        "title": "Status Code Distribution",
+        "type": "piechart",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 12},
+        "targets": [
+          {
+            "expr": "sum by (status) (django_http_requests_total)",
+            "legendFormat": "{{status}}"
+          }
+        ]
+      },
+      {
+        "title": "Image Upload Rate",
+        "type": "timeseries",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 20},
+        "targets": [
+          {
+            "expr": "rate(django_http_requests_total{method=\"POST\",view=\"upload_images_view\"}[5m])",
+            "legendFormat": "Uploads per second"
+          }
+        ]
+      },
+      {
+        "title": "Image Processing Time",
+        "type": "timeseries",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 20},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(django_http_request_duration_seconds_bucket{view=\"upload_images_view\"}[5m]))",
+            "legendFormat": "p95 Processing Time"
+          }
+        ]
+      },
+      {
+        "title": "Top Endpoints by Request Count",
+        "type": "table",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 28},
+        "targets": [
+          {
+            "expr": "topk(10, sum by (view) (rate(django_http_requests_total[5m])))",
+            "format": "table"
+          }
+        ]
+      },
+      {
+        "title": "Slowest Endpoints",
+        "type": "table",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 28},
+        "targets": [
+          {
+            "expr": "topk(10, rate(django_http_request_duration_seconds_sum[5m]) / rate(django_http_request_duration_seconds_count[5m]))",
+            "format": "table"
+          }
+        ]
+      }
+    ],
+    "refresh": "30s",
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    }
+  }
+}
