@@ -1,0 +1,33 @@
+server:
+  log_level: info
+
+metrics:
+  global:
+    scrape_interval: 60s
+    remote_write:
+      - url: ${GRAFANA_CLOUD_PROMETHEUS_URL}
+        basic_auth:
+          username: ${GRAFANA_CLOUD_PROMETHEUS_USER}
+          password: ${GRAFANA_CLOUD_API_KEY}
+
+  configs:
+    - name: default
+      scrape_configs:
+        # Scrape Django Prometheus metrics
+        - job_name: 'django'
+          static_configs:
+            - targets: ['localhost:8000']
+          metrics_path: '/metrics'
+
+        # Scrape system metrics (CPU, memory, disk)
+        - job_name: 'node'
+          static_configs:
+            - targets: ['localhost:9100']
+
+integrations:
+  # System metrics (CPU, memory, disk, network)
+  node_exporter:
+    enabled: true
+    include_exporter_metrics: true
+    disable_collectors:
+      - mdadm

@@ -157,10 +157,26 @@ CORS_ALLOW_ALL_ORIGINS = True  # Temporary for testing
 
 CORS_ALLOW_CREDENTIALS = True
 
+# Allow all HTTP methods
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
 # Allow Grafana Faro tracing headers
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'traceparent',
     'tracestate',
+]
+
+# Expose headers to frontend
+CORS_EXPOSE_HEADERS = [
+    'Content-Type',
+    'X-CSRFToken',
 ]
 
 # CSRF Settings for React Frontend

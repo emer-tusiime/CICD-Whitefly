@@ -36,6 +36,8 @@ def signup_view(request):
     serializer = SignUpSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
+        # Auto-login after signup
+        login(request, user)
         return Response({
             'user': UserSerializer(user).data,
             'message': 'User created successfully'

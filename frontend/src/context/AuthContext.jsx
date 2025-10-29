@@ -64,6 +64,10 @@ export const AuthProvider = ({ children }) => {
       const response = await api.post('/auth/signup/', { username, email, password });
       console.log('Signup successful:', response.data);
       
+      // User is auto-logged in on backend, set user state
+      setUser(response.data.user);
+      setMonitoringUser(response.data.user);
+      
       return response.data;
     } catch (error) {
       console.error('Signup error:', error.response?.data || error.message);
@@ -72,10 +76,23 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    await api.post('/auth/logout/');
-    setUser(null);
-    // Clear user from monitoring
-    clearMonitoringUser();
+    try {
+      await api.post('/auth/logout/');
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      // Clear user state
+      setUser(null);
+      clearMonitoringUser();
+      
+      // Get fresh CSRF token for next login
+      try {
+        await api.get('/csrf/');
+        console.log('Fresh CSRF token obtained after logout');
+      } catch (error) {
+        console.error('Failed to get fresh CSRF token:', error);
+      }
+    }
   };
 
   return (

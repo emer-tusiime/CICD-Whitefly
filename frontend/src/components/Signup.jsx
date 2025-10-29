@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Bug, Eye, EyeOff, Loader2, Mail, User, Lock } from 'lucide-react';
-import api from '../api/axios';
+import { useAuth } from '../context/AuthContext';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +15,7 @@ const Signup = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { signup } = useAuth();
 
   const handleChange = (e) => {
     setFormData({
@@ -40,14 +41,12 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      await api.post('/auth/signup/', {
-        username: formData.username,
-        email: formData.email,
-        password: formData.password,
-      });
-      navigate('/login');
+      const response = await signup(formData.username, formData.email, formData.password);
+      console.log('Signup successful, user is now logged in:', response);
+      // User is auto-logged in, redirect to dashboard
+      navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.error || 'Signup failed. Please try again.');
+      setError(err.response?.data?.error || err.message || 'Signup failed. Please try again.');
     } finally {
       setLoading(false);
     }
