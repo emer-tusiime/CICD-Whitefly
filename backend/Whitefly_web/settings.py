@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -155,6 +156,12 @@ CORS_ALLOWED_ORIGINS = [
 CORS_ALLOW_ALL_ORIGINS = True  # Temporary for testing
 
 CORS_ALLOW_CREDENTIALS = True
+
+# Allow Grafana Faro tracing headers
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'traceparent',
+    'tracestate',
+]
 
 # CSRF Settings for React Frontend
 CSRF_TRUSTED_ORIGINS = [
