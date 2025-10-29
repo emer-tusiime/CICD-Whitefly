@@ -15,6 +15,10 @@ Pillow==12.0.0
 # HTTP & Utilities
 requests==2.32.5
 sqlparse==0.5.3
+ 
+# Monitoring / Metrics
+django-prometheus==2.3.1
+prometheus-client==0.20.0
 
 # Monitoring & Metrics
 django-prometheus==2.3.1
